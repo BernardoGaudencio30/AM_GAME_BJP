@@ -8,6 +8,14 @@
     - a capacidade de emitir eventos
 */
 
+"use strict"
+
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
 class GameObject extends EventTarget {
 
     constructor(x, y, width, height) {
