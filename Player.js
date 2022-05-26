@@ -9,6 +9,29 @@ class Player extends AnimatedSprite{
     }
 }
 
+Player.load("./assets/Player/Run.png", 8, 2);
+
+const numAssets = 1;
+
+let numAssetsLoaded = 0;
+
+let player;
+
+const fps = 13;
+const timeBetweenUpdateDraw = 1000 / fps;
+let acumulatedTimeBetweenFrames = 0;
+let timeLastFrame;
+
+window.addEventListener("assetLoad", (e) => {
+    console.log("Asset Loaded", e.detail);
+
+    numAssetsLoaded++;
+
+    if(numAssetsLoaded == numAssets){
+        startGame();
+    }
+});
+
 function startGame(){
     player = new Player(canvas.width/2, canvas.height/2, 275, 275);
 
