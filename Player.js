@@ -33,7 +33,7 @@ window.addEventListener("assetLoad", (e) => {
 });
 
 function startGame(){
-    player = new Player(canvas.width/2, canvas.height/2, 275, 275);
+    player = new Player(canvas.width/2, canvas.height/2, 128, 80);
 
     player.draw();
 
