@@ -3,6 +3,3 @@ Trabalho Aplicações Multimédia 2º ano, 2022
 
 
 Trabalho Realizado por: Bernardo Gaudêncio, João Pedro Santos e Pedro Silvestre
-
-ola
-Sobre
