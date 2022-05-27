@@ -3,5 +3,3 @@ Trabalho Aplicações Multimédia 2º ano, 2022
 
 
 Trabalho Realizado por: Bernardo Gaudêncio, João Pedro Santos e Pedro Silvestre
-
-No dia 20/05/2022 andámos à procura de sprites e esquecemo-nos de publicar as atualizações no github.
