@@ -55,3 +55,12 @@ function animate(time){
         acumulatedTimeBetweenFrames = 0;
     }
 }
+
+window.addEventListerner('keydown', (event) => {
+switch(event.key){
+    case 'd':
+    player.velocity.x = 2;    
+    break
+}
+
+});
