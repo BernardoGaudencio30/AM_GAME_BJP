@@ -113,6 +113,7 @@ window.addEventListener('keyup', (event) => {
     switch(event.key){
         case 'd':
             keys.d.pressed = false;
+            console.log('keys.d.pressed')
             break;
         case 's':
             break;
