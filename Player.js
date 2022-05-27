@@ -53,11 +53,35 @@ function startGame(){
     animate(performance.now());
 }
 
+const keys = {
+    a:{
+       pressed: false
+    },
+    d:{
+        pressed: false
+     },
+     w:{
+        pressed: false 
+     },
+     s:{
+        pressed: false 
+     }
+}
+
+
 function animate(time){
     requestAnimationFrame(animate);
 
     acumulatedTimeBetweenFrames += time - timeLastFrame;
     timeLastFrame = time;
+
+    if(keys.a.pressed){
+        player.velocityX = -1
+    } else if(keys.d.pressed){
+        player.velocityX = 1
+    }
+
+
 
     if(acumulatedTimeBetweenFrames > timeBetweenUpdateDraw){
         ctx.clearRect(0,0, canvas.width, canvas.height);
