@@ -2,3 +2,7 @@ body{
     overflow: hidden;
     margin: 0px;
 }
+
+#canvas1{
+    background-color: deeppink;
+}
