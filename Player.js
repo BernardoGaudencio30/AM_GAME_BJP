@@ -10,6 +10,7 @@ class Player extends AnimatedSprite{
     update() {
         super.update();
         this.draw();
+        this.x += this.velocity.x;
         this.y += this.velocityY;
         if(this.y + this.height + this.velocityY >= canvas.height){
             this.velocityY = 0;
@@ -72,6 +73,33 @@ switch(event.key){
     case 'd':
     player.velocity.x = 2;    
     break
+    case 'w':
+    player.velocity.y = -2;    
+    break
+    case 's':
+    player.velocity.y = 2;    
+    break
+    case 'a':
+    player.velocity.x = -2;    
+    break
 }
 
 });
+
+window.addEventListerner('keyup', (event) => {
+    switch(event.key){
+        case 'd':
+        player.velocity.x = 0;    
+        break
+        case 'w':
+        player.velocity.y = 0;    
+        break
+        case 's':
+        player.velocity.y = 0;    
+        break
+        case 'a':
+        player.velocity.x = 0;    
+        break
+        }
+    
+    });
