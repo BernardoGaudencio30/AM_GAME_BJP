@@ -92,7 +92,7 @@ function animate(time){
     }
 }
 
-window.addEventListerner('keydown', (event) => {
+window.addEventListener('keydown', (event) => {
     switch(event.key){
         case 'd':
             keys.d.pressed = true;
@@ -110,7 +110,7 @@ window.addEventListerner('keydown', (event) => {
     }
 });
 
-window.addEventListerner('keyup', (event) => {
+window.addEventListener('keyup', (event) => {
     switch(event.key){
         case 'd':
             keys.d.pressed = false;
