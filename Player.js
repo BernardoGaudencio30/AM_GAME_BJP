@@ -5,12 +5,13 @@ class Player extends AnimatedSprite{
         super(x, y, width, height);
         this.velocityX = velocityX;
         this.velocityY = velocityY;
+        this.lastKey;
     }
 
     update() {
         super.update();
         this.draw();
-        this.x += this.velocity.x;
+        this.x += this.velocityX;
         this.y += this.velocityY;
         if(this.y + this.height + this.velocityY >= canvas.height){
             this.velocityY = 0;
@@ -45,7 +46,7 @@ window.addEventListener("assetLoad", (e) => {
 });
 
 function startGame(){
-    player = new Player(canvas.width/2, canvas.height/2, 128, 80);
+    player = new Player(canvas.width/2, canvas.height/2, 128, 80, 0, 0);
 
     player.draw();
 
@@ -59,13 +60,13 @@ const keys = {
     },
     d:{
         pressed: false
-     },
-     w:{
+    },
+    w:{
         pressed: false 
-     },
-     s:{
+    },
+    s:{
         pressed: false 
-     }
+    }
 }
 
 
@@ -75,55 +76,49 @@ function animate(time){
     acumulatedTimeBetweenFrames += time - timeLastFrame;
     timeLastFrame = time;
 
-    if(keys.a.pressed){
-        player.velocityX = -1
-    } else if(keys.d.pressed){
-        player.velocityX = 1
-    }
-
-
-
     if(acumulatedTimeBetweenFrames > timeBetweenUpdateDraw){
         ctx.clearRect(0,0, canvas.width, canvas.height);
 
         player.update();
+
+        // Player Movement
+        if(keys.a.pressed && player.lastKey === "a"){
+            player.velocityX = -1
+        } else if(keys.d.pressed && player.lastKey === "d"){
+            player.velocityX = 1
+        }
 
         acumulatedTimeBetweenFrames = 0;
     }
 }
 
 window.addEventListerner('keydown', (event) => {
-switch(event.key){
-    case 'd':
-    player.velocity.x = 2;    
-    break
-    case 'w':
-    player.velocity.y = -2;    
-    break
-    case 's':
-    player.velocity.y = 2;    
-    break
-    case 'a':
-    player.velocity.x = -2;    
-    break
-}
-
+    switch(event.key){
+        case 'd':
+            keys.d.pressed = true;
+            player.lastKey = "d";
+            break;
+        case 'w':
+            player.velocityY = -20;
+            break;
+        case 's':
+            break;
+        case 'a':
+            keys.a.pressed = true;
+            player.lastKey = "a";
+            break;
+    }
 });
 
 window.addEventListerner('keyup', (event) => {
     switch(event.key){
         case 'd':
-        player.velocity.x = 0;    
-        break
-        case 'w':
-        player.velocity.y = 0;    
-        break
+            keys.d.pressed = false;
+            break;
         case 's':
-        player.velocity.y = 0;    
-        break
+            break;
         case 'a':
-        player.velocity.x = 0;    
-        break
-        }
-    
-    });
+            keys.a.pressed = false;
+            break;
+    }  
+});
