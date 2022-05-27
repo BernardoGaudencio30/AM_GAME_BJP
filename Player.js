@@ -16,7 +16,6 @@ class Player extends AnimatedSprite{
         if(this.y + this.height + this.velocityY >= canvas.height){
             this.velocityY = 0;
         } else {
-            console.log(this.y);
             this.velocityY += gravity;
         }
     }
@@ -83,9 +82,9 @@ function animate(time){
 
         // Player Movement
         if(keys.a.pressed && player.lastKey === "a"){
-            player.velocityX = -1
+            player.velocityX = -2
         } else if(keys.d.pressed && player.lastKey === "d"){
-            player.velocityX = 1
+            player.velocityX = 2
         }
 
         acumulatedTimeBetweenFrames = 0;
@@ -99,7 +98,7 @@ window.addEventListener('keydown', (event) => {
             player.lastKey = "d";
             break;
         case 'w':
-            player.velocityY = -20;
+            player.velocityY = -13;
             break;
         case 's':
             break;
