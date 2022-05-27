@@ -1,11 +1,22 @@
+const gravity = 0.5;
+
 class Player extends AnimatedSprite{
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, velocityX, velocityY) {
         super(x, y, width, height);
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
     }
 
     update() {
         super.update();
         this.draw();
+        this.y += this.velocityY;
+        if(this.y + this.height + this.velocityY >= canvas.height){
+            this.velocityY = 0;
+        } else {
+            console.log(this.y);
+            this.velocityY += gravity;
+        }
     }
 }
 
