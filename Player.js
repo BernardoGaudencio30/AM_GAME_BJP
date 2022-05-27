@@ -80,6 +80,8 @@ function animate(time){
 
         player.update();
 
+        player.velocityX = 0;
+        
         // Player Movement
         if(keys.a.pressed && player.lastKey === "a"){
             player.velocityX = -2
