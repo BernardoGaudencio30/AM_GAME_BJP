@@ -1,11 +1,22 @@
+const gravity = 0.5;
+
 class Player extends AnimatedSprite{
     constructor(x, y, width, height) {
-        super(x, y, width, height);
+        super(x, y, width, height, velocityX, velocityY);
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
     }
 
     update() {
         super.update();
         this.draw();
+        this.y += this.velocityY;
+        if(this.y + this.height + this.velocityY >= canvas.height){
+            this.velocityY = 0;
+        } else {
+            console.log(this.y);
+            this.velocityY += gravity;
+        }
     }
 }
 
@@ -33,7 +44,7 @@ window.addEventListener("assetLoad", (e) => {
 });
 
 function startGame(){
-    player = new Player(canvas.width/2, canvas.height/2, 128, 80);
+    player = new Player(canvas.width/2, canvas.height/2, 128, 80, 0, 0);
 
     player.draw();
 
