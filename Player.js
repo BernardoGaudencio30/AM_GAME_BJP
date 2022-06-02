@@ -36,7 +36,7 @@ class Player extends AnimatedSprite{
     
 }
 
-//Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
+Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
 
 const numAssets = 1;
 
@@ -59,8 +59,6 @@ window.addEventListener("assetLoad", (e) => {
         startGame();
     }
 });
-
-startGame();
 
 function startGame(){
     player = new Player(canvas.width/2, canvas.height/2, 50, 150, 0, 0);
