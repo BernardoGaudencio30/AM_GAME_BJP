@@ -21,7 +21,7 @@ class Player extends AnimatedSprite{
     }
 }
 
-Player.load("./assets/Player/Run.png", 8, 2);
+Player.load("./assets/Player1/Run.png", 12, 1);
 
 const numAssets = 1;
 
