@@ -18,7 +18,7 @@ class Player extends AnimatedSprite{
         ctx.fillStyle = "green";
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
-        //ctx.fillStyle = "blue";
+        ctx.fillStyle = "blue";
         ctx.fillRect(this.attackBox.x, this.attackBox.y, this.attackBox.width, this.attackBox.height);
         console.log("Position: "+this.attackBox.x+","+this.attackBox.y);
     }
