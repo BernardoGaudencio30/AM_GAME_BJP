@@ -6,8 +6,17 @@ class Player extends AnimatedSprite{
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.lastKey;
+        this.attackBox = {
+            x: this.x,
+            y: this.y,
+            width: 100,
+            height: 50
+        }
     }
-
+    draw(){
+        ctx.fillStyle = "blue";
+        ctx.fillRect(this.attackBox.x, this.attackBox.y, this.attackBox.width, this.attackBox.height);
+    }
     update() {
         super.update();
         this.draw();
@@ -19,6 +28,7 @@ class Player extends AnimatedSprite{
             this.velocityY += gravity;
         }
     }
+    
 }
 
 Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
