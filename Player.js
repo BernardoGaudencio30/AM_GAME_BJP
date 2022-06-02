@@ -1,4 +1,4 @@
-const gravity = 0.5;
+const gravity = 0.7;
 
 class Player extends AnimatedSprite{
     constructor(x, y, width, height, velocityX, velocityY) {
@@ -61,7 +61,7 @@ window.addEventListener("assetLoad", (e) => {
 
 function startGame(){
     player = new Player(canvas.width/2, canvas.height/2, 50, 150, 0, 0);
-    player1 = new Player(canvas.width/2 + 100, canvas.height/2, 50, 150, 0, 0);
+    player1 = new Player(canvas.width/2 + 200, canvas.height/2, 50, 150, 0, 0);
 
     player.draw();
     player1.draw();
