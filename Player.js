@@ -42,6 +42,7 @@ const numAssets = 1;
 let numAssetsLoaded = 0;
 
 let player;
+let player1;
 
 const fps = 13;
 const timeBetweenUpdateDraw = 1000 / fps;
@@ -60,8 +61,10 @@ window.addEventListener("assetLoad", (e) => {
 
 function startGame(){
     player = new Player(canvas.width/2, canvas.height/2, 50, 150, 0, 0);
+    player1 = new Player(canvas.width/2 + 100, canvas.height/2, 50, 150, 0, 0);
 
     player.draw();
+    player1.draw();
 
     timeLastFrame = performance.now();
     animate(performance.now());
@@ -93,6 +96,7 @@ function animate(time){
         ctx.clearRect(0,0, canvas.width, canvas.height);
 
         player.update();
+        player1.update();
 
         player.velocityX = 0;
         
