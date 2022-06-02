@@ -21,7 +21,7 @@ class Player extends AnimatedSprite{
     }
 }
 
-Player.load("assets/Player1/NewHero_Run.png", 12, 12);
+Player.load("./assets/Player1/Run.png", 12, 12); //frames e frames por linha
 
 const numAssets = 1;
 
@@ -45,7 +45,7 @@ window.addEventListener("assetLoad", (e) => {
 });
 
 function startGame(){
-    player = new Player(canvas.width/2, canvas.height/2, 128, 80, 0, 0);
+    player = new Player(canvas.width/2, canvas.height/2, 128, 96, 0, 0);
 
     player.draw();
 
