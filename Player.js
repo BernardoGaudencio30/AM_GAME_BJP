@@ -15,6 +15,9 @@ class Player extends AnimatedSprite{
     }
     draw(){
         super.draw();
+        ctx.fillStyle = "green";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+
         ctx.fillStyle = "blue";
         ctx.fillRect(this.attackBox.x, this.attackBox.y, this.attackBox.width, this.attackBox.height);
     }
@@ -56,7 +59,7 @@ window.addEventListener("assetLoad", (e) => {
 });
 
 function startGame(){
-    player = new Player(canvas.width/2, canvas.height/2, 128, 96, 0, 0);
+    player = new Player(canvas.width/2, canvas.height/2, 50, 150, 0, 0);
 
     player.draw();
 
