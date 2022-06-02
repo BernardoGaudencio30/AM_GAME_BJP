@@ -35,7 +35,7 @@ class Player extends AnimatedSprite{
     
 }
 
-Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
+//Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
 
 const numAssets = 1;
 
