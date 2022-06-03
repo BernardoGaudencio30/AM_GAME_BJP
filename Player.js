@@ -14,7 +14,7 @@ class Player extends AnimatedSprite{
         }
     }
     draw(){
-        super.draw();
+        //super.draw();
         ctx.fillStyle = "green";
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
