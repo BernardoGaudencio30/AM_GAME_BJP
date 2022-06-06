@@ -2,7 +2,7 @@
     - coordenadas x e y
     - um tamanho width e height
 
-    - método update 
+    - método update
     - método draw
 
     - a capacidade de emitir eventos
@@ -18,40 +18,38 @@ canvas.height = window.innerHeight;
 
 class GameObject extends EventTarget {
 
-    constructor(x, y, width, height) {
+    constructor(position, width, height) {
         super();
-
-        this.x = x;
-        this.y = y;
+        this.position = position;
         this.width = width;
         this.height = height;
     }
 
     update() {
-        // a redefinir nas classes derivadas 
+        // a redefinir nas classes derivadas
     }
 
     draw() {
-        // a redefinir nas classes derivadas 
+        // a redefinir nas classes derivadas
 
     }
 }
 
-// Um Sprite é um GameObject que tem associado uma imagem 
+// Um Sprite é um GameObject que tem associado uma imagem
 class Sprite extends GameObject {
 
     static imagem;
 
-    constructor(x, y, width, height) {
-        super(x, y, width, height);
+    constructor(position, width, height) {
+        super(position, width, height);
     }
 
     update() {
-        // a redefinir nas classes derivadas 
+        // a redefinir nas classes derivadas
     }
 
     draw() {
-        ctx.drawImage(this.constructor.imagem, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.constructor.imagem, this.position.x, this.position.y, this.width, this.height);
     }
 
     static load(urlImagem) {
@@ -65,15 +63,15 @@ class Sprite extends GameObject {
     }
 }
 
-// Um AnimatedSprite é um Sprite com a capacidade de Animação 
+// Um AnimatedSprite é um Sprite com a capacidade de Animação
 class AnimatedSprite extends Sprite {
 
     static numberFrames;
     static numberFramesPerRow;
     static slice;
 
-    constructor(x, y, width, height) {
-        super(x, y, width, height);
+    constructor(position, width, height) {
+        super(position, width, height);
 
         this.currentFrame = 1;
 
@@ -97,7 +95,8 @@ class AnimatedSprite extends Sprite {
 
     draw() {
         ctx.drawImage(this.constructor.imagem, this.sx, this.sy, this.constructor.slice.width, this.constructor.slice.height,
-            this.x, this.y, this.width, this.height);
+            this.position.x, this.position.y, this.width, this.height);
+
     }
 
     static load(urlImagem, numberFrames, numberFramesPerRow) {
@@ -122,8 +121,4 @@ class AnimatedSprite extends Sprite {
         });
 
     }
-
-
 }
-
-
