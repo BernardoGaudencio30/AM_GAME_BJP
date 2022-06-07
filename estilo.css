@@ -1,8 +1,46 @@
-body{
+*{
+    box-sizing: border-box; /*não passar a width do canvas*/
+  }
+  
+  body {
     overflow: hidden;
     margin: 0px;
-}
-
-#canvas1{
+  }
+  
+  #canvas1 {
     background-color: turquoise;
-}
+  }
+  
+  #containergeral {
+    position: relative;
+    display: inline-block; //para ficar com a width do canvas que está dentro desta div
+  }
+  
+  #containersmall {
+    position: absolute;
+    display: flex;
+    align-items: center; /*tem de ter display: flex para funcionar*/
+    width: 100%;
+    padding: 20px;
+  }
+  
+  #playerhealthbar {
+    background-color: yellow;
+    height: 30px;
+    width: 100%;
+  }
+  
+  #timer1 {
+    background-color: red;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    /*para deixar de encolher este elemento mesmo com os adjacentes a 100%*/
+  }
+  
+  #enemyhelathbar {
+    background-color: yellow;
+    height: 30px;
+    width: 100%;
+  }
+  
