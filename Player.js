@@ -1,4 +1,5 @@
-const gravity = 0.7;
+//Gravidade do Jogo
+const gravity = 1;
 
 class Player extends AnimatedSprite{
     constructor(position, velocity, width, height, offset) {
@@ -97,6 +98,7 @@ function startGame(){
 
 //Objeto para guardar o estado das teclas associadas ao movimento do Player e do Enemy (se as teclas estão a ser pressionadas ou não)
 const keys = {
+    //Movimento Player
     a:{
         pressed: false
     },
@@ -109,10 +111,17 @@ const keys = {
     s:{
         pressed: false
     },
+    //Movimento Enimigo
     ArrowRight: {
         pressed: false
     },
     ArrowLeft: {
+        pressed: false
+    },
+    ArrowUp: {
+        pressed: false
+    },
+    ArrowDown: {
         pressed: false
     }
 }
@@ -144,16 +153,16 @@ function animate(time){
 
         // Movimento do Player
         if(keys.a.pressed && player.lastKey === "a"){
-            player.velocity.x = -4
+            player.velocity.x = -5
         } else if(keys.d.pressed && player.lastKey === "d"){
-            player.velocity.x = 4
+            player.velocity.x = 5
         }
 
         // Movimento do Enemy
         if(keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft"){
-            enemy.velocity.x = -4
+            enemy.velocity.x = -5
         } else if(keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight"){
-            enemy.velocity.x = 4
+            enemy.velocity.x = 5
         }
 
         //Deteção de colisões
