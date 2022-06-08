@@ -40,7 +40,7 @@
     /*para deixar de encolher este elemento mesmo com os adjacentes a 100%*/
   }
   
-  #enemyhelathbar {
+  #enemyhealthbar {
     background-color: yellow;
     height: 30px;
     width: 100%;
