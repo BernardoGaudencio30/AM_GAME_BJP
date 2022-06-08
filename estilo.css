@@ -5,10 +5,17 @@
   body {
     overflow: hidden;
     margin: 0px;
+    background-color: black;
   }
   
   #canvas1 {
     background-color: turquoise;
+    position: absolute;
+    width: 1000px;
+    height: 500px;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
   }
   
   #containergeral {

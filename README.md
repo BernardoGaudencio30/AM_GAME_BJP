@@ -17,3 +17,8 @@ Alterações feitas no ficheiro Player.js:
 -resolvido o problema na caixa de ataque.
 -adição de movimento ao enemy.
 -adição de deteção de colisões entre 2 retângulos.
+
+
+08/06/2022:
+
+Criação do efeito parallax no background

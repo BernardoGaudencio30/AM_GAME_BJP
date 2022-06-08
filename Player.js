@@ -1,6 +1,34 @@
 //Gravidade do Jogo
 const gravity = 1;
 
+let gameSpeed = 1.5;
+
+//Background Layers
+let layer1 = new Image();
+layer1.src = "./assets/DarkForest/Layer_1.png";
+let layer2 = new Image();
+layer2.src = "./assets/DarkForest/Layer_2.png";
+let layer3 = new Image();
+layer3.src = "./assets/DarkForest/Layer_3.png";
+let layer4 = new Image();
+layer4.src = "./assets/DarkForest/Layer_4.png";
+let layer5 = new Image();
+layer5.src = "./assets/DarkForest/Layer_5.png";
+let layer6 = new Image();
+layer6.src = "./assets/DarkForest/Layer_6.png";
+let layer7 = new Image();
+layer7.src = "./assets/DarkForest/Layer_7.png";
+let layer8 = new Image();
+layer8.src = "./assets/DarkForest/Layer_8.png";
+let layer9 = new Image();
+layer9.src = "./assets/DarkForest/Layer_9.png";
+let layer10 = new Image();
+layer10.src = "./assets/DarkForest/Layer_10.png";
+let layer11 = new Image();
+layer11.src = "./assets/DarkForest/Layer_11.png";
+let layer12 = new Image();
+layer12.src = "./assets/DarkForest/Layer_12.png";
+
 class Player extends AnimatedSprite{
     constructor(position, velocity, width, height, offset) {
         super(position, width, height)
@@ -61,6 +89,31 @@ class Player extends AnimatedSprite{
 
 }
 
+class Background {
+    constructor(image, x, y, width, height, speedModifier) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.image = image;
+        this.speedModifier = speedModifier;
+        this.speed = gameSpeed * this.speedModifier;
+    }
+
+    draw(){
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
+    }
+
+    update(){
+        this.speed = gameSpeed * this.speedModifier;
+        if(this.x <= -this.width){
+            this.x = 0;
+        }
+        this.x = this.x - this.speed;
+    }
+}
+
 Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
 
 const numAssets = 1;
@@ -69,6 +122,18 @@ let numAssetsLoaded = 0;
 
 let player;
 let enemy;
+let backgroundLayer1;
+let backgroundLayer2;
+let backgroundLayer3;
+let backgroundLayer4;
+let backgroundLayer5;
+let backgroundLayer6;
+let backgroundLayer7;
+let backgroundLayer8;
+let backgroundLayer9;
+let backgroundLayer10;
+let backgroundLayer11;
+let backgroundLayer12;
 
 const fps = 13;
 const timeBetweenUpdateDraw = 1000 / fps;
@@ -86,9 +151,23 @@ window.addEventListener("assetLoad", (e) => {
 });
 
 function startGame(){
+    backgroundLayer12 = new Background(layer12, 0, -200, 1000, 700, 0.2);
+    backgroundLayer11 = new Background(layer11, 0, -200, 1000, 700, 0.4);
+    backgroundLayer10 = new Background(layer10, 0, -210, 1000, 700, 0.6);
+    backgroundLayer9 = new Background(layer9, 0, -210, 1000, 700, 0.8);
+    backgroundLayer8 = new Background(layer8, 0, -300, 1000, 700, 1);
+    backgroundLayer7 = new Background(layer7, 0, -210, 1000, 700, 1.2);
+    backgroundLayer6 = new Background(layer6, 0, -210, 1000, 700, 1.4);
+    backgroundLayer5 = new Background(layer5, 0, -300, 1000, 700, 1.6);
+    backgroundLayer4 = new Background(layer4, 0, -210, 1000, 700, 1.8);
+    backgroundLayer3 = new Background(layer3, 0, -190, 1000, 700, 2);
+    backgroundLayer2 = new Background(layer2, 0, -210, 1000, 700, 2.2);
+    backgroundLayer1 = new Background(layer1, 0, -200, 1000, 700, 2.4);
+
     player = new Player({x: 100, y: 100}, { x: 0, y: 0}, 50, 150, {x: 0, y: 0});
     enemy = new Player({x: 400, y: 100}, { x: 0, y: 0}, 50, 150, {x: 50, y:0});
 
+    backgroundLayer1.draw();
     player.draw();
     enemy.draw();
 
@@ -144,6 +223,44 @@ function animate(time){
     if(acumulatedTimeBetweenFrames > timeBetweenUpdateDraw){
         ctx.clearRect(0,0, canvas.width, canvas.height);
 
+        // Background
+        backgroundLayer12.update();
+        backgroundLayer12.draw();
+
+        backgroundLayer11.update();
+        backgroundLayer11.draw();
+
+        backgroundLayer10.update();
+        backgroundLayer10.draw();
+
+        backgroundLayer9.update();
+        backgroundLayer9.draw();
+
+        backgroundLayer8.update();
+        backgroundLayer8.draw();
+
+        backgroundLayer7.update();
+        backgroundLayer7.draw();
+
+        backgroundLayer6.update();
+        backgroundLayer6.draw();
+
+        backgroundLayer5.update();
+        backgroundLayer5.draw();
+
+        backgroundLayer4.update();
+        backgroundLayer4.draw();
+
+        backgroundLayer3.update();
+        backgroundLayer3.draw();
+
+        backgroundLayer2.update();
+        backgroundLayer2.draw();
+
+        backgroundLayer1.update();
+        backgroundLayer1.draw();
+
+        
         player.update();
         enemy.update();
 
