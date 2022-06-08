@@ -37,6 +37,7 @@
     width: 100px;
     height: 100px;
     flex-shrink: 0;
+    border-radius: 20px;
     /*para deixar de encolher este elemento mesmo com os adjacentes a 100%*/
   }
   
