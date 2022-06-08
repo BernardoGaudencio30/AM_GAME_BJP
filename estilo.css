@@ -13,7 +13,7 @@
   
   #containergeral {
     position: relative;
-    display: inline-block; //para ficar com a width do canvas que está dentro desta div
+    display: inline-block; /*para ficar com a width do canvas que está dentro desta div*/
   }
   
   #containersmall {
