@@ -22,3 +22,9 @@ Alterações feitas no ficheiro Player.js:
 08/06/2022:
 
 Criação do efeito parallax no background
+
+
+09/06/2022:
+
+Implementação dos sprites, dos seus estados, e das suas respetivas colisões.
+Aperfeiçoamento e organização de partes do código.
