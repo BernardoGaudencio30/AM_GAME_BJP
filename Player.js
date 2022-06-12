@@ -5,17 +5,35 @@ const gravity = 0.7;
 let gameSpeed = 1.5;
 
 // Assets
-const numAssets = 2;
+const numAssets = 4;
 let numAssetsLoaded = 0;
 
-let player;
-let enemy;
+let fighter;
+let boss;
+
+// Enemies
+// Skeleton
+let skeletonTime = 0;
+let skeletonLimit = 0;
+let skeletonSpawnTime = 150;
+let skeletons = [];
+
+// Minotaur
+let minotaurTime = 0;
+let minotaurLimit = 0;
+let minotaurSpawnTime = 400;
+let minotaurs = [];
+
 
 // Fps
 const fps = 10;
 const timeBetweenUpdateDraw = 1000 / fps;
 let acumulatedTimeBetweenFrames = 0;
 let timeLastFrame;
+
+// Colisões
+let enemyCollision = false;
+let fighterTime = true;
 
 // Background Layers
 let layer1 = new Image();
@@ -78,7 +96,12 @@ const keys = {
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+//-----------------------------------------------------Classes----------------------------------------------------------
+//**********************************************************************************************************************
+
+// Classe do Player Base
+//Objetivo: Criar classes para todos os Players do jogo a partir desta classe
 class Player extends AnimatedSprite{
     constructor(position, velocity, width, height, offset) {
         super(position, width, height)
@@ -109,17 +132,21 @@ class Player extends AnimatedSprite{
          */
 
         // Desenho da AttackBox
+        /*
         if(this.isAttacking){
             ctx.fillStyle = "blue";
             ctx.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
         }
+
+         */
     }
     update() {
         super.update();
         this.draw();
 
-        this.attackBox.position.x = this.position.x - this.attackBox.offset.x;
-        this.attackBox.position.y = this.position.y;
+        this.attackBox.position.x = this.position.x - (this.attackBox.offset.x);
+        //this.attackBox.position.y = this.position.y;
+        this.attackBox.position.y = this.position.y - (this.attackBox.offset.y);
 
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
@@ -145,6 +172,193 @@ class Player extends AnimatedSprite{
 
 }
 
+// Classe do Lutador
+class Fighter extends Player{
+    constructor(position, velocity, width, height, offset) {
+        super(position, velocity, width, height, offset);
+        this.position = position;
+        this.velocity = velocity;
+        this.width = width;
+        this.height = height;
+        this.lastKey;
+        this.isAttacking;
+        this.groundHeight = canvas.height - 230;
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
+            width: 100,
+            height: 50
+        }
+    }
+
+    draw() {
+        super.draw();
+    }
+
+    update() {
+        super.update();
+    }
+
+    attack() {
+        super.attack();
+    }
+}
+
+//----------------------------------------------Enemies-----------------------------------------------------------------
+
+// Classe dos Inimigos
+// Objetivo: Criar outras classes de cada Inimigo a partir desta classe
+class Enemy extends Player{
+    constructor(position, velocity, width, height, offset, speed) {
+        super(position, velocity, width, height, offset);
+        this.position = position;
+        this.velocity = velocity;
+        this.width = width;
+        this.height = height;
+        this.lastKey;
+        this.isAttacking;
+        this.groundHeight = canvas.height - 360;
+        this.speed = speed;
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
+            width: 100,
+            height: 50
+        }
+    }
+
+    draw() {
+        super.draw();
+    }
+
+    update() {
+        super.update();
+    }
+
+    attack() {
+        super.attack();
+    }
+}
+
+// Classe do Boss
+class Boss extends Enemy{
+    constructor(position, velocity, width, height, offset, speed) {
+        super(position, velocity, width, height, offset, speed);
+        this.position = position;
+        this.velocity = velocity;
+        this.width = width;
+        this.height = height;
+        this.lastKey;
+        this.isAttacking;
+        this.groundHeight = canvas.height - 360;
+        this.speed = speed;
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
+            width: 15,
+            height: 50
+        }
+    }
+
+    draw() {
+        super.draw();
+    }
+
+    update() {
+        super.update();
+        //this.position.x -= 2;
+    }
+
+    attack() {
+        super.attack();
+    }
+}
+
+// Classe do Esqueleto
+class Skeleton extends Enemy{
+    constructor(position, velocity, width, height, offset, speed) {
+        super(position, velocity, width, height, offset, speed);
+        this.position = position;
+        this.velocity = velocity;
+        this.width = width;
+        this.height = height;
+        this.lastKey;
+        this.isAttacking;
+        this.groundHeight = canvas.height - 272;
+        this.speed = speed;
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
+            width: 100,
+            height: 50
+        }
+    }
+
+    draw() {
+        super.draw();
+    }
+
+    update() {
+        super.update();
+        this.position.x -= this.speed;
+    }
+
+    attack() {
+        super.attack();
+    }
+}
+
+// Classe do Minotauro
+class Minotaur extends Enemy{
+    constructor(position, velocity, width, height, offset, speed) {
+        super(position, velocity, width, height, offset, speed);
+        this.position = position;
+        this.velocity = velocity;
+        this.width = width;
+        this.height = height;
+        this.lastKey;
+        this.isAttacking;
+        this.groundHeight = canvas.height - 50;
+        this.speed = speed;
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
+            width: 100,
+            height: 50
+        }
+    }
+
+    draw() {
+        super.draw();
+    }
+
+    update() {
+        super.update();
+        this.position.x -= this.speed;
+    }
+
+    attack() {
+        super.attack();
+    }
+}
+
+//------------------------------------------------Background------------------------------------------------------------
+// Classe do Background
 class Background {
     constructor(image, x, y, width, height, speedModifier) {
         this.x = x;
@@ -170,40 +384,19 @@ class Background {
     }
 }
 
-class Enemy extends Player{
-    constructor(position, velocity, width, height, offset) {
-        super(position, velocity, width, height, offset);
-        this.position = position;
-        this.velocity = velocity;
-        this.width = width;
-        this.height = height;
-        this.lastKey;
-        this.isAttacking;
-        this.groundHeight = canvas.height - 360;
-        this.attackBox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            offset,
-            width: 100,
-            height: 50
-        }
-    }
-    draw() {
-        super.draw();
-    }
-    update() {
-        super.update();
-        //this.position.x -= 2;
-    }
-}
+//**********************************************************************************************************************
+//------------------------------------------------Assets a Carregar-----------------------------------------------------
+//**********************************************************************************************************************
 
-//-----------------------------------------------------------------------------------------------------------------------------
-Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
-Enemy.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
+Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+Skeleton.load("./assets/SkeletonSS/SkeletonWalk.png", 6, 6);
+Minotaur.load("./assets/Minotauro/Run Mino.png", 8, 8);
 
-//-----------------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+//----------------------------------------------------Eventos-----------------------------------------------------------
+//**********************************************************************************************************************
+
 window.addEventListener("assetLoad", (e) => {
     console.log("Asset Loaded", e.detail);
 
@@ -215,102 +408,81 @@ window.addEventListener("assetLoad", (e) => {
 });
 
 // Evento para quando as teclas do teclado são pressionadas
-// Objetivo: Fornecer movimento ao player e ao enemy
+// Objetivo: Fornecer movimento ao Fighter
 window.addEventListener('keydown', (event) => {
     switch(event.key){
         // Movimento do Player
         case 'd':
-            Player.load("./assets/Player1/NewHero_Run.png", 12, 12);
+            Fighter.load("./assets/Player1/NewHero_Run.png", 12, 12);
             keys.d.pressed = true;
-            player.lastKey = "d";
+            fighter.lastKey = "d";
             break;
         case 'w':
-            player.velocity.y = -6;
-            Player.load("./assets/Player1/NewHero_Jump.png", 14, 14);
+            fighter.velocity.y = -6;
+            Fighter.load("./assets/Player1/NewHero_Jump.png", 14, 14);
             break;
         case 's':
             break;
         case 'a':
-            Player.load("./assets/Player1/NewHero_Run.png", 12, 12);
+            Fighter.load("./assets/Player1/NewHero_Run.png", 12, 12);
             keys.a.pressed = true;
-            player.lastKey = "a";
+            fighter.lastKey = "a";
             break;
         case ' ':
-            Player.load("./assets/Player1/NewHero_Attack.png", 7, 7);
-            player.attack();
+            if(fighterTime){
+                Fighter.load("./assets/Player1/NewHero_Attack.png", 7, 7);
+                fighterTime = false;
+                fighter.attack();
+            }
+            //Para que o Fighter tenha que esperar 500ms para poder efetuar o ataque novamente
+            setTimeout(()=>{
+                fighterTime = true;
+            }, 500);
             break;
         case 'Control':
-            Player.load("./assets/Player1/NewHero_Shield.png", 2, 2);
+            Fighter.load("./assets/Player1/NewHero_Shield.png", 2, 2);
             break;
-
-        // Movimento do Enemy
-        /*
-    case 'ArrowRight':
-        keys.ArrowRight.pressed = true;
-        enemy.lastKey = "ArrowRight";
-        break;
-    case 'ArrowUp':
-        enemy.velocity.y = -13;
-        break;
-    case 'ArrowDown':
-        enemy.attack();
-        break;
-    case 'ArrowLeft':
-        keys.ArrowLeft.pressed = true;
-        enemy.lastKey = "ArrowLeft";
-        break;
-
-         */
     }
 });
 
 //Evento para quando as teclas do teclado são soltas
-//Objetivo: Parar de fornecer movimento ao player e ao enemy
+//Objetivo: Parar de fornecer movimento ao Fighter
 window.addEventListener('keyup', (event) => {
     switch(event.key){
         // Movimento do Player
         case 'd':
             keys.d.pressed = false;
-            Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+            Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
             break;
         case 's':
             break;
         case 'w':
             keys.w.pressed = false;
             setTimeout(() => {
-                Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+                Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
             }, 500);
             break;
         case 'a':
             keys.a.pressed = false;
-            Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+            Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
             break;
         case ' ':
             setTimeout(() => {
-                Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+                Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
             }, 500);
             break;
         case 'Control':
             setTimeout(() => {
-                Player.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+                Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
             }, 100);
             break;
-
-        /*
-    // Movimento do Enemy
-    case 'ArrowRight':
-        keys.ArrowRight.pressed = false;
-        break;
-    case 'ArrowLeft':
-        keys.ArrowLeft.pressed = false;
-        break;
-
-         */
-
     }
 });
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+//-----------------------------------------------------Funções----------------------------------------------------------
+//**********************************************************************************************************************
+
 // Função que recebe dois parâmetros (cada parâmetro está associado a um retângulo) e que verifica a colisão entre esses dois parâmetros
 // Com AttackBox
 function rectangleCollision(rectangle1, rectangle2){
@@ -329,7 +501,48 @@ function retangleCollision1(rectangle1, rectangle2){
         rectangle1.position.y + rectangle1.height > rectangle2.position.y);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+// Função para gerar um número aleatório entre 2 valores
+function randomNumberGenerator(min, max){
+    let num = Math.floor(Math.random() * (max - min + 1)) + min;
+    return num;
+}
+
+// Função para gerar esqueletos
+function spawnSkeleton(){
+    if (skeletonLimit < randomNumberGenerator(20, 40)){
+        if(skeletonTime > skeletonSpawnTime){
+            skeletons.push(new Skeleton({x: canvas.width + 100, y: 0}, {x: 0, y: 0}, 150, 200, {x:50, y:0}, randomNumberGenerator(1,3)));
+            skeletonLimit++;
+            skeletonTime = 0;
+        }
+    }
+}
+
+// Função para gerar minotauros
+function spawnMinotaur(){
+    if (minotaurLimit < randomNumberGenerator(20, 40)){
+        if(minotaurTime > minotaurSpawnTime){
+            minotaurs.push(new Minotaur({x: canvas.width + 100, y: 0}, {x: 0, y: 0}, 150, 200, {x:50, y:0}, randomNumberGenerator(1,3)));
+            minotaurLimit++;
+            minotaurTime = 0;
+        }
+    }
+}
+
+// Função para remover os objetos do jogo quando estes saem do campo de jogo
+// Apenas utilizado no lado esquerdo do jogo, pois os inimigos são gerados no lado direito fora do campo de jogo
+function outGame(objects){
+    objects.forEach((object, objectIndex) => {
+        if(object.position.x < 0 - object.width){
+                objects.splice(objectIndex, 1);
+        }
+    });
+}
+
+//**********************************************************************************************************************
+//----------------------------------------------Inicialização do Jogo---------------------------------------------------
+//**********************************************************************************************************************
+
 function startGame(){
     backgroundLayer12 = new Background(layer12, 0, -200, 1000, 700, 0.2);
     backgroundLayer11 = new Background(layer11, 0, -200, 1000, 700, 0.4);
@@ -344,18 +557,21 @@ function startGame(){
     backgroundLayer2 = new Background(layer2, 0, -210, 1000, 700, 2.2);
     backgroundLayer1 = new Background(layer1, 0, -200, 1000, 700, 2.4);
 
-    player = new Player({x: 100, y: 100}, { x: 0, y: 0}, 150, 200, {x: 0, y: 0});
-    enemy = new Enemy({x: 400, y: 0}, { x: 0, y: 0}, 250, 300, {x: 50, y:0});
+    fighter = new Fighter({x: 100, y: 100}, { x: 0, y: 0}, 150, 200, {x: 0, y: 0});
+    boss = new Boss({x: 400, y: 0}, { x: 0, y: 0}, 250, 300, {x: -130, y:-100}, 0);
 
     backgroundLayer1.draw();
-    player.draw();
-    enemy.draw();
+    fighter.draw();
+    boss.draw();
 
     timeLastFrame = performance.now();
     animate(performance.now());
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+//---------------------------------------------------Animate------------------------------------------------------------
+//**********************************************************************************************************************
+
 function animate(time){
     requestAnimationFrame(animate);
 
@@ -364,6 +580,13 @@ function animate(time){
 
     if(acumulatedTimeBetweenFrames > timeBetweenUpdateDraw){
         ctx.clearRect(0,0, canvas.width, canvas.height);
+
+        // Cada vez que a função animate é chamada, o valor do skeletonTime é incrementado
+        skeletonTime++;
+        //console.log(enemyTime);
+
+        // Cada vez que a função animate é chamada, o valor do minotaurTime é incrementado
+        minotaurTime++;
 
         // Background
         backgroundLayer12.update();
@@ -402,82 +625,196 @@ function animate(time){
         backgroundLayer1.update();
         backgroundLayer1.draw();
 
-        player.update();
+        fighter.update();
 
-        enemy.update();
+        boss.update();
+
+        // Geração dos inimigos
+        spawnSkeleton();
+        spawnMinotaur();
+
+        skeletons.forEach(skeleton => {
+            skeleton.update();
+        });
+
+        minotaurs.forEach(minotaur => {
+            minotaur.update();
+        });
+
+        outGame(skeletons);
+        outGame(minotaurs);
+        console.log("Tamanho do array dos esqueletos: " + skeletons.length);
+        console.log("Tamanho do array dos minotauros: " + minotaurs.length);
 
         // Para que o player e o enemy não estejam sempre em movimento
-        player.velocity.x = 0;
-        enemy.velocity.x = 0;
+        fighter.velocity.x = 0;
+        boss.velocity.x = 0;
 
         // Movimento do Player
-        if(keys.a.pressed && player.lastKey === "a"){
-            player.velocity.x = -5
+        if(keys.a.pressed && fighter.lastKey === "a"){
+            fighter.velocity.x = -5
             gameSpeed = 0;
             // Quando a condição é true, o background ganha movimento
-            if(player.position.x < 100){
+            if(fighter.position.x < 100){
                 gameSpeed = 1.5;
             }
-        } else if(keys.d.pressed && player.lastKey === "d"){
-            player.velocity.x = 5
+        } else if(keys.d.pressed && fighter.lastKey === "d"){
+            fighter.velocity.x = 5
             gameSpeed = 0;
             // Quando a condição é true, o background ganha movimento
-            if(player.position.x > 400){
+            if(fighter.position.x > 400){
                 gameSpeed = 1.5;
             }
         }else{
             gameSpeed = 0;
         }
 
-        // Movimento do Enemy
-        /*
-        if(keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft"){
-            enemy.velocity.x = -4
-        } else if(keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight"){
-            enemy.velocity.x = 4
-        }
+        //**************************************************************************************************************
+        //----------------------------------------Deteção de Colisões---------------------------------------------------
+        //**************************************************************************************************************
 
-         */
+        //------------------------------------------Player vs Enemies---------------------------------------------------
+        // Deteção de colisão entre o Fighter e o Boss
+        // O Fighter ataca e o Boss leva hit
+        if(rectangleCollision(fighter, boss) && fighter.isAttacking && enemyCollision==false){
+            Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/04_demon_take_hit.png", 5, 5);
 
-        // Deteção de colisões
-        // Deteção de colisão entre o player e o enemy
+            fighter.isAttacking = false;
 
-        if(rectangleCollision(player, enemy)
-            && player.isAttacking
-        ){
-            player.isAttacking = false;
-            Enemy.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/04_demon_take_hit.png", 5, 5);
             setTimeout(() => {
-                Enemy.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+                Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
             }, 500);
+
             console.log("Player Attack");
         }
 
+        // Deteção de colisão entre o Fighter e o Skeleton
+        // O Fighter ataca e o Skeleton leva hit
+        skeletons.forEach((skeleton, skeletonIndex) => {
+            if(rectangleCollision(fighter, skeleton) && fighter.isAttacking && enemyCollision==false){
+                Skeleton.load("./assets/SkeletonSS/SkeletonDead.png", 4, 4);
 
-        // Deteção de colisão entre o enemy e o player
-        /*
-        if(rectangleCollision(enemy, player)
-            && enemy.isAttacking
-        ){
-            enemy.isAttacking = false;
-            console.log("Enemy Attack");
-        }
+                // Para remover o skeleton do array skeletons
+                skeletons.splice(skeletonIndex, 1);
 
-         */
+                fighter.isAttacking = false;
 
-        // Deteção de colisão entre o Enemy e o Player
-        // Objetivo: Quando o Enemy chegar perto do Player, o Enemy vais atacá-lo
-        if(retangleCollision1(enemy, player)){
-            // Utilizado setTimeout para resolver o problema: o Enemy começava a atacar antes de chegar perto do Player
-            setTimeout(() => {
-                Enemy.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/03_demon_cleave.png", 15, 15);
-                enemy.attack();
-                // Tirar vida aqui
-            }, 2500);
+                console.log("Player Attack");
+            }
+        });
+
+        // Deteção de colisão entre o Fighter e o Minotaur
+        // O Fighter ataca e o Minotaur leva hit
+        minotaurs.forEach((minotaur, minotaurIndex) => {
+            if(rectangleCollision(fighter, minotaur) && fighter.isAttacking && enemyCollision==false){
+                Minotaur.load("./assets/Minotauro/Dead Mino.png", 6, 6);
+
+                // Para remover o minotaur do array minotaurs
+                minotaurs.splice(minotaurIndex, 1);
+
+                fighter.isAttacking = false;
+
+                console.log("Player Attack");
+            }
+        });
+
+        //------------------------------------------Enemies vs Player---------------------------------------------------
+        // Deteção de colisão entre o Boss e o Player
+        // Objetivo: Quando o Boss chegar perto do Player, o Boss vais atacá-lo
+        if(retangleCollision1(boss, fighter)){
+            //Para ativar o método attack do Boss
+            boss.attack();
+
+            enemyCollision=true;
+
+            // Ao ser ativo o método attack do Boss, este vai atribuir o valor de true ao atributo isAttacking pertencente ao Boss
+            // A condição é executada caso o atributo isAttacking pertencente ao Boss e a variável bossCollision tenham como valor true
+            if(boss.isAttacking && enemyCollision){
+                // Utilizado setTimeout para resolver o problema: o Enemy começava a atacar antes de chegar perto do Player
+                setTimeout(() => {
+                    Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/03_demon_cleave.png", 15, 15);
+                    if(rectangleCollision(boss, fighter)){
+                        // Para o tempo bater certo, isto é, para que quando a faca do Boss acertar no Fighter, este tenha a animação de ter sido acertado
+                        setTimeout(() => {
+                            Fighter.load("./assets/Player1/NewHero_HitSword.png", 8, 8);
+                            // Dano no player
+                            // Tirar vida aqui
+                        }, 650);
+                    }
+                    // Código repetido para que exista a animação do Fighter a dar acertar no Boss
+                    if(rectangleCollision(fighter, boss) && fighter.isAttacking && enemyCollision==false){
+                        Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/04_demon_take_hit.png", 5, 5);
+
+                        fighter.isAttacking = false;
+
+                        setTimeout(() => {
+                            Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+                        }, 500);
+
+                        //bossCollision=true;
+
+                        console.log("Player Attack");
+                    }
+                }, 2500);
+
+                boss.isAttacking = false;
+
+                enemyCollision=false;
+            }
         } else {
-            // Assim que o Enemy deixa de ficar perto do Player, o Enemy volta ao estado idle
-            Enemy.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+            // Assim que o Boss deixa de ficar perto do Player, o Boss volta ao estado idle
+            Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+            Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
         }
+
+        // Deteção de colisão entre o Skeleton e o Player
+        // Objetivo: Quando o Skeleton chegar perto do Player, o Skeleton vais atacá-lo
+        skeletons.forEach(skeleton => {
+            if(retangleCollision1(skeleton, fighter)){
+                skeleton.speed = 0;
+                //Para ativar o método attack do Skeleton
+                skeleton.attack();
+
+                enemyCollision=true;
+
+                // Ao ser ativo o método attack do Skeleton, este vai atribuir o valor de true ao atributo isAttacking pertencente ao Skeleton
+                // A condição é executada caso o atributo isAttacking pertencente ao Skeleton e a variável bossCollision tenham como valor true
+                if(skeleton.isAttacking && enemyCollision){
+                    // Utilizado setTimeout para resolver o problema: o Skeleton começava a atacar antes de chegar perto do Fighter
+                    setTimeout(() => {
+                        Skeleton.load("./assets/SkeletonSS/SkeletonAttack.png", 8, 8);
+                        if(rectangleCollision(skeleton, fighter)){
+                            // Para o tempo bater certo, isto é, para que quando a faca do Skeleton acertar no Fighter, este tenha a animação de ter sido acertado
+                            setTimeout(() => {
+                                Fighter.load("./assets/Player1/NewHero_HitSword.png", 8, 8);
+                                // Dano no player
+                                // Tirar vida aqui
+                            }, 650);
+                        }
+                        // Código repetido para que exista a animação do Fighter a dar acertar no Skeleton
+                        if(rectangleCollision(fighter, skeleton) && fighter.isAttacking && enemyCollision==false){
+                            Skeleton.load("./assets/SkeletonSS/SkeletonDead.png", 4, 4);
+
+                            skeletons.splice(skeletonIndex, 1);
+
+                            fighter.isAttacking = false;
+
+                            fighterCollsion = true;
+
+                            console.log("Player Attack");
+                        }
+                    }, 2500);
+
+                    skeleton.isAttacking = false;
+
+                    enemyCollision=false;
+                }
+            } else {
+                // Assim que o Skeleton deixa de ficar perto do Player, o Skeleton volta ao estado idle
+                Skeleton.load("./assets/SkeletonSS/SkeletonWalk.png", 6, 6);
+                Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+            }
+        })
 
         acumulatedTimeBetweenFrames = 0;
     }
