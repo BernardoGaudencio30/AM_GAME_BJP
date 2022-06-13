@@ -29,6 +29,7 @@ Criação do efeito parallax no background
 Implementação dos sprites, dos seus estados, e das suas respetivas colisões.
 Aperfeiçoamento e organização de partes do código.
 
+
 13/06/2022:
 
 Organização do código e respetivas modificações necessárias:
@@ -47,3 +48,19 @@ Função para remover os objetos do jogo quando estes saem do campo de jogo.
 Deteção de colisões entre o player e o boss, e vice versa.
 Deteção de colisões entre o player e o skeleton, e vice versa (ainda por melhorar).
 Deteção de colisões entre o player e o minotaur.
+
+
+13/06/2022:
+
+Criação de novas classes:
+-Criação da classe baseEnemy.
+-Criação da classe Skeleton.
+-Criação da classe Minotaur.
+
+Funções:
+-Criação da função spawnBoss.
+-Aprimoramento da função spawnSkeleton.
+-Aprimoramento da função spawnMinotaur.
+
+Deteção de colisões:
+-Realização de todas as deteções de colisões (ainda por melhorar).
