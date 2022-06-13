@@ -195,7 +195,7 @@ class Lives extends Sprite {
 
     //Número de vidas que o lutador irá ter
     for (let i = 0; i < this.lives; i++) {
-      ctx.drawImage(this.constructor.imagem, 25 * i + 20, 30, 30, 25); //width da imagem * o numero de vidas + o espaçamento que queremos dar left margin esquerda
+      ctx.drawImage(this.constructor.image, 25 * i + 20, 30, 30, 25); //width da imagem * o numero de vidas + o espaçamento que queremos dar left margin esquerda
     }
 
   }
