@@ -28,6 +28,8 @@ let minotaurs = [];
 
 // Boss
 let bossTime = false;
+let deadBoss = false;
+let deleteBoss = false;
 
 
 // Fps
@@ -288,7 +290,6 @@ class Boss extends Enemy{
 
     update() {
         super.update();
-        //this.position.x -= 2;
     }
 
     attack() {
@@ -626,9 +627,12 @@ window.addEventListener('keyup', (event) => {
             break;
         case 'w':
             keys.w.pressed = false;
+            /*
             setTimeout(() => {
                 Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
             }, 500);
+
+             */
             break;
         case 'a':
             keys.a.pressed = false;
@@ -720,6 +724,36 @@ function spawnBoss(){
         boss = new Boss({x: 400, y: 0}, { x: 0, y: 0}, 250, 300, {x: -130, y:-100}, 0);
         bossTime = true;
     }
+}
+
+// Função para escrever o texto das vidas do Fighter
+function fighterLivesText(){
+    ctx.font =  "20px Helvetica";
+    ctx.fillStyle = "white";
+    ctx.fillText("Fighter Lives:", 20, 22);
+}
+
+// Função para escrever o texto das vidas do Boss
+function bossLivesText(){
+    ctx.font =  "20px Helvetica";
+    ctx.fillStyle = "white";
+    ctx.fillText("Boss Lives:", 810, 22);
+}
+
+// Função de Fim do Jogo
+function gameOver(){
+    ctx.font = "40px Helvetica";
+    ctx.fillStyle = "white";
+    ctx.fillText('You Lost All Your Lives!', canvas.width / 2 - 210, canvas.height / 2 - 70);
+}
+
+// Função para quando o Fighter ganha o jogo
+function gameWin(){
+    ctx.fillStyle = "white";
+    ctx.font = "40px Helvetica";
+    ctx.fillText('You Won the Game!', canvas.width / 2 - 185, canvas.height / 2 - 85);
+    ctx.font = "30px Helvetica";
+    ctx.fillText("You have shown no mercy towards the DEMON!!", canvas.width / 2 - 330, canvas.height / 2 - 40);
 }
 
 //**********************************************************************************************************************
@@ -814,6 +848,8 @@ function animate(time){
 
         fighter.update();
 
+        fighterLivesText();
+
         livesFighter.update();
 
         // Geração dos inimigos
@@ -835,11 +871,32 @@ function animate(time){
         console.log("Tamanho do array dos esqueletos: " + skeletons.length);
         console.log("Tamanho do array dos minotauros: " + minotaurs.length);
 
+
+
         // Assim que todos os inimigos sejam eliminados, o Boss é gerado
-        if(skeletons.length == 0 && minotaurs.length == 0 && skeletonLimit >= skeletonsNumber && minotaurLimit >= minotaursNumber){
+        if(skeletons.length == 0 && minotaurs.length == 0 && skeletonLimit >= skeletonsNumber && minotaurLimit >= minotaursNumber && deleteBoss == false){
             spawnBoss();
             boss.update();
-            livesBoss.update();
+            boss.position.y = 140;
+            // Só desenha o texto e as vidas do Boss se este não tiver sido morto
+            if(deadBoss == false){
+                bossLivesText();
+                livesBoss.update();
+            }
+        }
+
+
+        // Caso o Boss morra o Fighter ganha o Jogo
+        if(deadBoss == true){
+            gameWin();
+            Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/05_demon_death.png", 22, 22);
+            Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+            setTimeout(() => {
+                deleteBoss = true;
+                bossTime = false;
+                // Para deixar de mostrar o Boss
+                boss = undefined;
+            }, 3000);
         }
 
         // Para que o Fighter não esteja sempre em movimento
@@ -887,53 +944,64 @@ function animate(time){
                     Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
                 }, 500);
 
+                livesBoss.lives--;
+
+                if(bossTime == true && livesBoss.lives == 0){
+                    Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/05_demon_death.png", 22, 22);
+                    bossTime=false;
+                    deadBoss = true;
+                }
+
                 console.log("Player Attack");
             }
 
             // Deteção de colisão entre o Boss e o Fighter
             // Objetivo: Quando o Boss chegar perto do Fighter, o Boss vai atacá-lo
-            if(retangleCollision1(boss, fighter)){
-                //Para ativar o método attack do Boss
-                boss.attack();
+            if(deadBoss == false){
+                if(retangleCollision1(boss, fighter)){
+                    //Para ativar o método attack do Boss
+                    boss.attack();
 
-                enemyCollision=true;
+                    enemyCollision=true;
 
-                // Ao ser ativo o método attack do Boss, este vai atribuir o valor de true ao atributo isAttacking pertencente ao Boss
-                // A condição é executada caso o atributo isAttacking pertencente ao Boss e a variável enemyCollision tenham como valor true
-                if(boss.isAttacking && enemyCollision){
-                    // Utilizado setTimeout para resolver o problema: o Enemy começava a atacar antes de chegar perto do Player
-                    setTimeout(() => {
-                        Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/03_demon_cleave.png", 15, 15);
-                        if(rectangleCollision(boss, fighter)){
-                            // Para o tempo bater certo, isto é, para que quando a faca do Boss acertar no Fighter, este tenha a animação de ter sido atingido
-                            setTimeout(() => {
-                                Fighter.load("./assets/Player1/NewHero_HitSword.png", 8, 8);
-                                // Dano no player
-                                // Tirar vida aqui
-                            }, 650);
-                        }
-                        // Código repetido para que exista a animação do Fighter a acertar no Boss
-                        if(rectangleCollision(fighter, boss) && fighter.isAttacking && enemyCollision==false){
-                            Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/04_demon_take_hit.png", 5, 5);
+                    // Ao ser ativo o método attack do Boss, este vai atribuir o valor de true ao atributo isAttacking pertencente ao Boss
+                    // A condição é executada caso o atributo isAttacking pertencente ao Boss e a variável enemyCollision tenham como valor true
+                    if(boss.isAttacking && enemyCollision){
+                        // Utilizado setTimeout para resolver o problema: o Enemy começava a atacar antes de chegar perto do Player
+                        setTimeout(() => {
+                            Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/03_demon_cleave.png", 15, 15);
+                            if(rectangleCollision(boss, fighter)){
+                                // Para o tempo bater certo, isto é, para que quando a faca do Boss acertar no Fighter, este tenha a animação de ter sido atingido
+                                setTimeout(() => {
+                                    Fighter.load("./assets/Player1/NewHero_HitSword.png", 8, 8);
+                                    // Dano no player
+                                    // Tirar vida aqui
+                                    livesFighter.lives--;
+                                }, 650);
+                            }
+                            // Código repetido para que exista a animação do Fighter a acertar no Boss
+                            if(rectangleCollision(fighter, boss) && fighter.isAttacking && enemyCollision==false){
+                                Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/04_demon_take_hit.png", 5, 5);
 
-                            fighter.isAttacking = false;
+                                fighter.isAttacking = false;
 
-                            setTimeout(() => {
-                                Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
-                            }, 500);
+                                setTimeout(() => {
+                                    Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+                                }, 500);
 
-                            console.log("Player Attack");
-                        }
-                    }, 2500);
+                                console.log("Player Attack");
+                            }
+                        }, 2500);
 
-                    boss.isAttacking = false;
+                        boss.isAttacking = false;
 
-                    enemyCollision=false;
+                        enemyCollision=false;
+                    }
+                } else {
+                    // Assim que o Boss deixa de ficar perto do Player, o Boss volta ao estado idle
+                    Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
+                    Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
                 }
-            } else {
-                // Assim que o Boss deixa de ficar perto do Player, o Boss volta ao estado idle
-                Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
-                Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
             }
         }
 
@@ -1015,7 +1083,6 @@ function animate(time){
                                     },200);
                                     // Dano no player
                                     // Tirar vida aqui
-                                    livesFighter.lives --;
                                 }, 650);
                             }
                             // Código repetido para que exista a animação do Fighter a acertar no Skeleton

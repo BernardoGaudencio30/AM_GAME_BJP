@@ -65,6 +65,7 @@ Funções:
 Deteção de colisões:
 -Realização de todas as deteções de colisões (ainda por melhorar).
 
+
 14/06/2022:
 
 Adição de novas funcionalidades:
@@ -79,3 +80,15 @@ Criação de novas classes:
 Deteção de colisões:
 -Aprimoramento das colisões (ainda por melhorar).
 -Adição temporária de borders para melhorar as deteções.
+
+
+15/06/2022:
+
+Criação de novas funções para desenho de texto:
+-Função para escrever o texto das vidas do Fighter.
+-Função para escrever o texto das vidas do Boss.
+-Função de Fim do Jogo.
+-Função para quando o Fighter ganha o jogo.
+
+Deteção de colisões:
+-Concluída a colisão entre o Fighter e o Boss. Quando o Boss morre é chamada a função de quando o Fighter ganha o jogo.
