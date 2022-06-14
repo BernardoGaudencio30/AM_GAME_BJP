@@ -64,3 +64,18 @@ Funções:
 
 Deteção de colisões:
 -Realização de todas as deteções de colisões (ainda por melhorar).
+
+14/06/2022:
+
+Adição de novas funcionalidades:
+-Os inimigos passaram a ser gerados fora do campo de jogo do lado direito.
+-O fighter perde o movimento para a esquerda assim que sai do campo de jogo.
+-Quando o boss é gerado aparece as vidas que este têm.
+
+Criação de novas classes:
+-classe fighterLives.
+-classe bossLives.
+
+Deteção de colisões:
+-Aprimoramento das colisões (ainda por melhorar).
+-Adição temporária de borders para melhorar as deteções.

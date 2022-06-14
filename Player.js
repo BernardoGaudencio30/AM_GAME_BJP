@@ -5,7 +5,7 @@ const gravity = 0.7;
 let gameSpeed = 1.5;
 
 // Assets
-const numAssets = 2;
+const numAssets = 4;
 let numAssetsLoaded = 0;
 
 let fighter;
@@ -16,14 +16,14 @@ let boss;
 let skeletonTime = 150;// Para iniciar o jogo logo com um Skeleton
 let skeletonLimit = 0;
 let skeletonSpawnTime = 150;
-let skeletonsNumber = 2;
+let skeletonsNumber = 1;
 let skeletons = [];
 
 // Minotaur
 let minotaurTime = 400;// Para iniciar o jogo logo com um Minotaur
 let minotaurLimit = 0;
 let minotaurSpawnTime = 400;
-let minotaursNumber = 2;
+let minotaursNumber = 1;
 let minotaurs = [];
 
 // Boss
@@ -41,7 +41,8 @@ let enemyCollision = false;
 let fighterTime = true;
 
 // Vidas
-let livesImage;
+let livesFighter;
+let livesBoss;
 
 // Background Layers
 let layer1 = new Image();
@@ -147,6 +148,11 @@ class Player extends AnimatedSprite{
         }
 
          */
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+
+        ctx.strokeStyle = "blue";
+        ctx.strokeRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
     }
     update() {
         super.update();
@@ -197,7 +203,7 @@ class Fighter extends Player{
                 y: this.position.y
             },
             offset,
-            width: 100,
+            width: 40,
             height: 50
         }
     }
@@ -323,6 +329,8 @@ class baseEnemy {
 
     draw(){
         ctx.drawImage(this.image, this.framesCurrent * (this.image.width / this.framesMax), 0, this.image.width / this.framesMax, this.image.height, this.position.x, this.position.y, this.width, this.height);
+        ctx.strokeRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        ctx.strokeStyle = "blue";
     }
 
     update(){
@@ -385,13 +393,15 @@ class Skeleton extends baseEnemy{
                 y: this.position.y
             },
             offset,
-            width: 100,
+            width: 30,
             height: 50
         }
     }
 
     draw() {
         super.draw();
+        ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+        ctx.strokeStyle = "red";
     }
 
     update() {
@@ -428,13 +438,15 @@ class Minotaur extends baseEnemy{
                 y: this.position.y
             },
             offset,
-            width: 100,
+            width: 30,
             height: 50
         }
     }
 
     draw() {
         super.draw();
+        ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+        ctx.strokeStyle = "red";
     }
 
     update() {
@@ -477,22 +489,20 @@ class Background {
 
 //-------------------------------------------------------Vidas----------------------------------------------------------
 
-//Classe das Lives
+//Classe das Vidas
 class Lives extends Sprite {
     constructor(position, width, height, lives) {
         super(position, width, height);
         this.position = position;
         this.width = width;
         this.height = height;
-        this.lives = 10;
+        this.lives = lives;
     }
 
     draw() {
-        //super.draw();
-
         //Número de vidas que o lutador irá ter
         for (let i = 0; i < this.lives; i++) {
-            ctx.drawImage(this.constructor.imagem, 25 * i + 20, 30, 30, 25); //width da imagem * o numero de vidas + o espaçamento que queremos dar left margin esquerda
+            ctx.drawImage(this.constructor.imagem, this.width * i + 20, this.position.y, this.width, this.height); //width da imagem * o número de vidas + o espaçamento que queremos dar left margin esquerda
         }
 
     }
@@ -502,6 +512,45 @@ class Lives extends Sprite {
         this.draw();
     }
 }
+// Classe das Vidas do Fighter
+class fighterLives extends Lives{
+    constructor(position, width, height, lives) {
+        super(position, width, height, lives);
+        this.position = position;
+        this.width = width;
+        this.height = height;
+        this.lives = lives;
+    }
+
+    draw() {
+        super.draw();
+    }
+
+    update() {
+        super.update();
+    }
+}
+
+// Classe das Vidas do Boss
+class bossLives extends Lives{
+    constructor(position, width, height, lives) {
+        super(position, width, height, lives);
+        this.position = position;
+        this.width = width;
+        this.height = height;
+        this.lives = lives;
+    }
+
+    draw() {
+        for (let i = 0; i < this.lives; i++) {
+            ctx.drawImage(this.constructor.imagem, (canvas.width -20) - (this.width * i + 20), this.position.y, this.width, this.height); //(largura do canvas -20) - (width da imagem * o número de vidas + o espaçamento que queremos dar left margin esquerda)
+        }
+    }
+
+    update() {
+        super.update();
+    }
+}
 
 //**********************************************************************************************************************
 //------------------------------------------------Assets a Carregar-----------------------------------------------------
@@ -509,7 +558,8 @@ class Lives extends Sprite {
 
 Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6); //frames e frames por linha
 Boss.load("./assets/boss_demon_slime_FREE_v1.0/spritesheets/01_demon_idle.png", 6, 6);
-Lives.load("./assets/pixel_heart.png");
+fighterLives.load("./assets/pixel_heart.png");
+bossLives.load("./assets/pixel_heart.png");
 
 //**********************************************************************************************************************
 //----------------------------------------------------Eventos-----------------------------------------------------------
@@ -631,7 +681,7 @@ function spawnSkeleton(){
     if (skeletonLimit < skeletonsNumber){
         if(skeletonTime > skeletonSpawnTime){
             //skeletons.push(new Skeleton({x: canvas.width + 100, y: 0}, {x: 0, y: 0}, 150, 200, {x:50, y:0}, randomNumberGenerator(1,3)));
-            skeletons.push(new Skeleton("./assets/SkeletonSS/SkeletonWalk.png",{x: 400, y: 0}, { x: 0, y: 0}, 150, 200, {x: 50, y: 0}, randomNumberGenerator(1,3), 6));
+            skeletons.push(new Skeleton("./assets/SkeletonSS/SkeletonWalk.png",{x: canvas.width + 50, y: 0}, { x: 0, y: 0}, 150, 200, {x: -110, y: -65}, randomNumberGenerator(1,3), 6));
             skeletonLimit++;
             skeletonTime = 0;
         }
@@ -644,7 +694,7 @@ function spawnMinotaur(){
     if (minotaurLimit < minotaursNumber){
         if(minotaurTime > minotaurSpawnTime){
             //minotaurs.push(new Minotaur({x: canvas.width + 100, y: 0}, {x: 0, y: 0}, 150, 200, {x:50, y:0}, randomNumberGenerator(1,3)));
-            minotaurs.push(new Minotaur("./assets/Minotauro/New_RunMino.png",{x: 600, y: 0}, { x: 0, y: 0}, 150, 200, {x: 50, y: -100}, randomNumberGenerator(1,3), 8));
+            minotaurs.push(new Minotaur("./assets/Minotauro/New_RunMino.png",{x: canvas.width + 350, y: 0}, { x: 0, y: 0}, 150, 200, {x: -110, y: -40}, randomNumberGenerator(1,3), 8));
             minotaurLimit++;
             minotaurTime = 0;
         }
@@ -665,6 +715,8 @@ function outGame(objects){
 function spawnBoss(){
     // Para que o Boss só seja criado uma vez
     if(bossTime == false){
+        // As vidas do Boss só aparecem quando este for gerado
+        livesBoss = new bossLives({x: 400, y: 30}, 30, 25, 6);
         boss = new Boss({x: 400, y: 0}, { x: 0, y: 0}, 250, 300, {x: -130, y:-100}, 0);
         bossTime = true;
     }
@@ -690,14 +742,14 @@ function startGame(){
     backgroundLayer1 = new Background(layer1, 0, -200, 1000, 700, 2.4);
 
     // Lutador
-    fighter = new Fighter({x: 100, y: 100}, { x: 0, y: 0}, 150, 200, {x: 0, y: 0});
+    fighter = new Fighter({x: 300, y: 100}, { x: 0, y: 0}, 150, 200, {x: 0, y: -40});
 
     // Vidas
-    livesImage = new Lives({x: 30, y: 20}, 30, 25, 5);
+    livesFighter = new fighterLives({x: 25, y: 30}, 30, 25, 5);
 
     backgroundLayer1.draw();
     fighter.draw();
-    livesImage.draw();
+    livesFighter.draw();
 
     timeLastFrame = performance.now();
     animate(performance.now());
@@ -762,7 +814,7 @@ function animate(time){
 
         fighter.update();
 
-        livesImage.update();
+        livesFighter.update();
 
         // Geração dos inimigos
         spawnSkeleton();
@@ -787,6 +839,7 @@ function animate(time){
         if(skeletons.length == 0 && minotaurs.length == 0 && skeletonLimit >= skeletonsNumber && minotaurLimit >= minotaursNumber){
             spawnBoss();
             boss.update();
+            livesBoss.update();
         }
 
         // Para que o Fighter não esteja sempre em movimento
@@ -799,6 +852,11 @@ function animate(time){
             // Quando a condição é true, o background ganha movimento
             if(fighter.position.x < 100){
                 gameSpeed = 1.5;
+                // Quando o Fighter sair do campo de jogo, este deixa de ter movimento para a esquerda
+                if(fighter.position.x < 0 - fighter.width){
+                    fighter.velocity.x = 0;
+                    gameSpeed = 0;
+                }
             }
         } else if(keys.d.pressed && fighter.lastKey === "d"){
             fighter.velocity.x = 5
@@ -929,7 +987,7 @@ function animate(time){
         // Objetivo: Quando o Skeleton chegar perto do Fighter, o Skeleton vai atacá-lo
         skeletons.forEach((skeleton, skeletonIndex) => {
             if(retangleCollision1(skeleton, fighter)){
-                if(skeleton.position.x == fighter.position.x + 50) {
+                if(skeleton.position.x == fighter.position.x + 30) {
                     // Para parar de fornecer movimento ao Skeleton
                     skeleton.speed = 0;
 
@@ -952,8 +1010,12 @@ function animate(time){
                                 // Para o tempo bater certo, isto é, para que quando a espada do Skeleton acertar no Fighter, este tenha a animação de ter sido atingido
                                 setTimeout(() => {
                                     Fighter.load("./assets/Player1/NewHero_HitSword.png", 8, 8);
+                                    setTimeout(() => {
+                                        Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+                                    },200);
                                     // Dano no player
                                     // Tirar vida aqui
+                                    livesFighter.lives --;
                                 }, 650);
                             }
                             // Código repetido para que exista a animação do Fighter a acertar no Skeleton
@@ -973,7 +1035,7 @@ function animate(time){
 
                                 console.log("Player Attack");
                             }
-                        }, 2000);
+                        }, 1500);
 
                         skeleton.isAttacking = false;
 
@@ -998,7 +1060,9 @@ function animate(time){
         // Objetivo: Quando o Minotaur chegar perto do Fighter, o Minotaur vai atacá-lo
         minotaurs.forEach((minotaur, minotaurIndex) => {
             if(retangleCollision1(minotaur, fighter)){
-                if(minotaur.position.x == fighter.position.x + 50) {
+                console.log("Passou");
+                if(minotaur.position.x == (fighter.position.x + 30)) {
+                    console.log("Colide");
                     // Para parar de fornecer movimento ao Minotaur
                     minotaur.speed = 0;
 
@@ -1020,6 +1084,9 @@ function animate(time){
                                 // Para o tempo bater certo, isto é, para que quando o machado do Minotaur acertar no Fighter, este tenha a animação de ter sido atingido
                                 setTimeout(() => {
                                     Fighter.load("./assets/Player1/NewHero_HitSword.png", 8, 8);
+                                    setTimeout(() => {
+                                        Fighter.load("./assets/Player1/NewHero_IdleSword.png", 6, 6);
+                                    },200);
                                     // Dano no player
                                     // Tirar vida aqui
                                 }, 650);
@@ -1040,7 +1107,7 @@ function animate(time){
 
                                 console.log("Player Attack");
                             }
-                        }, 2500);
+                        }, 1500);
 
                         minotaur.isAttacking = false;
 
