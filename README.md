@@ -92,3 +92,9 @@ Criação de novas funções para desenho de texto:
 
 Deteção de colisões:
 -Concluída a colisão entre o Fighter e o Boss. Quando o Boss morre é chamada a função de quando o Fighter ganha o jogo.
+
+
+15/06/2022:
+
+Deteção de colisões:
+-Conclusão das deteções de colisões. Quando o Fighter morre é chamada a função de fim de jogo.
