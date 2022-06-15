@@ -55,4 +55,10 @@ button {
   background-color: brown;
   border: none;
   border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: lightsalmon;
 }
